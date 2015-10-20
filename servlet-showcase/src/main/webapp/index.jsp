@@ -21,13 +21,29 @@
 </head>
 
 <body>
+<%
+  //  String name = request.getParameter("name");
+//  request.setAttribute("name", name);
+//  String works = request.getParameter("works");
+//  request.setAttribute("works", works);
+%>
 
 <h1>Здраво Веб
-  <%=request.getParameter("name")%>
+  <%=request.getAttribute("name")%> :
   <%
-    out.print(request.getParameter("name"));
+    out.print(request.getAttribute("works"));
+
   %>
 </h1>
+
+<form action="hello.do?query=text" method="post">
+  Name: <input type="text" name="name" value="${name}"/> <br/>
+  Works: <input type="text" name="works" value="<%=request.getAttribute("works")%>"/> <br/>
+  remember me: <input type="checkbox" name="showCompany" value="true">
+
+  <hr/>
+  <input value="Login" type="submit">
+</form>
 
 <div>
   Вие пристапувате од:

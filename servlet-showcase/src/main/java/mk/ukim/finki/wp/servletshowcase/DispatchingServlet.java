@@ -16,6 +16,8 @@ public class DispatchingServlet extends HttpServlet {
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
     RequestDispatcher dispatcher = req.getRequestDispatcher("hello.do");
+    System.out.println("Filter attribute value: " + req.getAttribute("filterAttribute"));
+    req.setAttribute("filterAttribute", 3);
     dispatcher.forward(req, resp);
   }
 
