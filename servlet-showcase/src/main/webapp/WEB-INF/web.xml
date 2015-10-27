@@ -6,7 +6,14 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          id="WebApp_ID" version="2.5">
 
     <display-name>Servlet Showcase</display-name>
+
+
+
+
     <description>Application that shows the basic JEE functinalities</description>
+    <listener>
+        <listener-class>mk.ukim.finki.wp.servletshowcase.LogListener</listener-class>
+    </listener>
 
     <filter>
         <filter-name>LogFilter</filter-name>
@@ -32,6 +39,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
         <servlet-name>dispatch-servlet</servlet-name>
         <servlet-class>mk.ukim.finki.wp.servletshowcase.DispatchingServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>mk.ukim.finki.wp.servletshowcase.LogoutServlet</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>hello-servlet</servlet-name>
@@ -48,4 +59,8 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
         <url-pattern>/dispatch.do</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
 </web-app>

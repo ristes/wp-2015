@@ -4,6 +4,7 @@ import mk.ukim.finki.wp.servletshowcase.model.Employee;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -59,8 +60,19 @@ public class HelloWorldServlet extends HttpServlet {
     employee.setName(name);
     employee.setCompany(works);
 
+    // read all cookies
+    Cookie[] cookies = req.getCookies();
+    for (Cookie c : cookies) {
+      System.out.println(c.getName() + ": " + c.getValue() + ";expires" + c.getMaxAge());
+    }
+
     //add the model entity into the session scope
     req.getSession().setAttribute("user", employee);
+
+    Cookie cookie = new Cookie("user", employee.getName());
+    cookie.setMaxAge(60);
+    resp.addCookie(cookie);
+
 
     RequestDispatcher dispatcher = req.getRequestDispatcher("index.jsp");
     dispatcher.forward(req, resp);

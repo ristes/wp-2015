@@ -27,6 +27,7 @@
 //  String works = request.getParameter("works");
 //  request.setAttribute("works", works);
 %>
+<a href="logout" style="float:right;margin-top:10px">Logout</a>
 
 <h1>Здраво Веб
   <%=request.getAttribute("name")%> :

@@ -31,7 +31,7 @@ public class LogFilter implements Filter {
     System.out.println("Filter attribute value: " + req.getAttribute("filterAttribute"));
   }
 
-  private String getTotalRequestsNumber(HttpServletRequest httpRequest) {
+  private synchronized String getTotalRequestsNumber(HttpServletRequest httpRequest) {
     Integer numOfRequests = (Integer) httpRequest.getServletContext().
       getAttribute("numOfRequests");
     if (numOfRequests == null) {
