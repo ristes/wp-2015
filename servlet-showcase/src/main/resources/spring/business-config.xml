@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Repository and Service layers -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:task="http://www.springframework.org/schema/task" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!-- ========================= RESOURCE DEFINITIONS ========================= -->
+    <context:property-placeholder location="classpath:spring/trax.properties"
+                                  order="1" ignore-unresolvable="true"/>
+    <context:property-placeholder location="classpath:spring/data-access.properties"
+                                  order="2" ignore-unresolvable="true"/>
+    <util:properties id="propertyConfigurer"
+                     location="classpath:buildNumber.properties "/>
+
+    <context:property-placeholder properties-ref="propertyConfigurer" order="3" ignore-unresolvable="true"/>
+
+    <context:property-placeholder location="classpath:hr.properties" order="4" ignore-unresolvable="true"/>
+
+    <context:component-scan base-package="com.snt.hr.trax"/>
+    <bean id="traxObserver" class="com.snt.trax.TraxObserver" scope="singleton">
+        <constructor-arg index="0" ref="traxListener"/>
+        <property name="interval" value="750"/>
+    </bean>
+
+
+    <bean id="traxRegistryMaster" class="com.snt.hr.trax.TraxRegistryMaster"></bean>
+
+    <!-- import the dataSource definition -->
+    <import resource="datasource-config.xml"/>
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="username" value="snthumanresources@gmail.com"/>
+        <property name="password" value="RamAPr3chaYa"/>
+        <property name="host" value="smtp.gmail.com"/>
+        <property name="port" value="25"/>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.transport.protocol">smtp</prop>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+                <prop key="mail.debug">true</prop>
+            </props>
+        </property>
+    </bean>
+
+    <context:component-scan base-package="com.snt.hr.config"/>
+
+    <context:component-scan base-package="com.snt.hr.service"/>
+
+
+    <!-- Configurer that replaces ${...} placeholders with values from a properties
+        file -->
+    <!-- (in this case, JDBC-related settings for the JPA EntityManager definition
+        below) -->
+
+    <!-- enables scanning for @Transactional annotations -->
+    <tx:annotation-driven/>
+
+    <bean id="shiftEnrollmentTask" class="com.snt.hr.tasks.ShiftEnrollmentTask"></bean>
+    <bean id="traxSyncTask" class="com.snt.hr.tasks.TraxSyncTask"></bean>
+    <bean id="employeeUpdateTask" class="com.snt.hr.tasks.DailyEmployeeUpdateTask"></bean>
+    <bean id="alarmScheduledTasks" class="com.snt.hr.tasks.AlarmScheduledTasks"></bean>
+
+    <task:annotation-driven scheduler="hrScheduler"/>
+    <task:scheduler id="hrScheduler" pool-size="10"/>
+
+
+    <beans profile="spring-data-jpa">
+
+        <jpa:repositories base-package="com.snt.hr.repository"/>
+
+
+        <bean id="entityManagerFactory"
+              class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+              p:dataSource-ref="dataSource">
+            <property name="jpaVendorAdapter">
+                <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"
+                      p:database="${jpa.database}" p:generateDdl="${jpa.generateDDL}"
+                      p:showSql="${jpa.showSQL}"/>
+
+
+            </property>
+            <property name="persistenceUnitName" value="hr"/>
+            <property name="packagesToScan" value="com.snt.hr"/>
+        </bean>
+
+        <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
+              p:entityManagerFactory-ref="entityManagerFactory"/>
+
+
+        <!-- Post-processor to perform exception translation on @Repository classes
+            (from native exceptions such as JPA PersistenceExceptions to Spring's DataAccessException
+            hierarchy). -->
+        <bean
+                class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+    </beans>
+
+</beans>
