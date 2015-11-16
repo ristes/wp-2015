@@ -6,24 +6,21 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          id="WebApp_ID" version="2.5">
 
     <display-name>Servlet Showcase</display-name>
-
-
-
-
     <description>Application that shows the basic JEE functinalities</description>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:spring/business-config.xml</param-value>
+    </context-param>
+
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
     <listener>
         <listener-class>mk.ukim.finki.wp.servletshowcase.LogListener</listener-class>
     </listener>
-
-    <filter>
-        <filter-name>LogFilter</filter-name>
-        <filter-class>mk.ukim.finki.wp.servletshowcase.LogFilter</filter-class>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>LogFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
 
     <servlet>
         <servlet-name>hello-servlet</servlet-name>

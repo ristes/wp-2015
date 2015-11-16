@@ -1,5 +1,6 @@
 package mk.ukim.finki.wp.web;
 
+import mk.ukim.finki.wp.model.Person;
 import mk.ukim.finki.wp.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,8 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,7 +37,7 @@ public class TestResource {
 
   @RequestMapping(value = "/info", method = RequestMethod.GET)
   @ResponseBody
-  public Map<RequestMappingInfo, HandlerMethod> info(){
+  public Map<RequestMappingInfo, HandlerMethod> info() {
     return requestMappingHandlerMapping.getHandlerMethods();
   }
 
@@ -82,6 +85,30 @@ public class TestResource {
     session.setAttribute("user", user);
     return user;
   }
+
+
+  @RequestMapping(value = "/persons", method = RequestMethod.GET)
+  @ResponseBody
+  public List<Person> persons() {
+    List<Person> persons = new ArrayList<Person>();
+
+    for (int i = 0; i < 100; i++) {
+      Person p = new Person();
+      p.name = "Riste" + i;
+      p.lastName = "Stojanov" + i;
+      p.imageUrl = "http://finki.ukim.mk/content/dataImages/staff/small/Stojanov_Riste.jpg";
+      p.visits = i;
+      persons.add(p);
+    }
+    return persons;
+  }
+
+  @RequestMapping(value = "/ping", method = RequestMethod.GET)
+  @ResponseBody
+  public boolean ping() {
+    return true;
+  }
+
 
 
 }
