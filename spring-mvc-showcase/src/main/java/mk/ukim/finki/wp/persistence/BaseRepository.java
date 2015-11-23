@@ -1,5 +1,6 @@
 package mk.ukim.finki.wp.persistence;
 
+import mk.ukim.finki.wp.model.BaseEntity;
 import mk.ukim.finki.wp.persistence.helper.PredicateBuilder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +20,15 @@ public class BaseRepository {
   @PersistenceContext
   private EntityManager em;
 
-  public <T> T getById(Class<T> type, Long id) {
+  /**
+   * SELECT t.* FROM @Table({type}) as t WHERE t.id={id}
+   *
+   * @param type
+   * @param id
+   * @param <T>
+   * @return
+   */
+  public <T extends BaseEntity> T getById(Class<T> type, Long id) {
     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<T> cq = cb.createQuery(type);
     final Root<T> root = cq.from(type);
@@ -38,17 +47,24 @@ public class BaseRepository {
     CriteriaQuery<T> cq = cb.createQuery(type);
     final Root<T> root = cq.from(type);
 
+//    Predicate securityPredicate = getSecurityPredicate(type);
+
     if (predicateBuilder != null)
       cq.where(predicateBuilder.toPredicate(cb, cq, root));
-
+//    else
+//      cq.where(securityPredicate);
     TypedQuery<T> query = em.createQuery(cq);
 
     return query.getResultList();
   }
 
+  private <T> Predicate getSecurityPredicate(Class<T> type) {
+    return null;
+  }
+
   @Transactional
-  public <T> T saveOrUpdate(T entity) {
-    if (!em.contains(entity)) {
+  public <T extends BaseEntity> T saveOrUpdate(T entity) {
+    if (entity.id != null && !em.contains(entity)) {
       entity = em.merge(entity);
     } else {
       em.persist(entity);

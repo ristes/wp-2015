@@ -1,5 +1,7 @@
 package mk.ukim.finki.wp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -14,8 +16,8 @@ public class Course extends BaseEntity {
 
   @ManyToMany(fetch = FetchType.LAZY,
     mappedBy = "courses")
-  public List<StudentWithoutCourse> students;
+  public List<Student> students;
 
-  @OneToMany(mappedBy = "course")
+  @OneToMany(mappedBy = "course",fetch = FetchType.LAZY)
   public List<CourseResource> resources;
 }
