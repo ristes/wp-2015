@@ -15,4 +15,6 @@ public interface CourseRepository {
   Course getByName(String courseName);
 
   void save(Course c);
+
+  void delete(Course byId);
 }

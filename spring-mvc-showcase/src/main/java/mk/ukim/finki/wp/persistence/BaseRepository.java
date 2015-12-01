@@ -73,6 +73,7 @@ public class BaseRepository {
     return entity;
   }
 
+  @Transactional
   public <T> int delete(Class<T> type, Long id) {
     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaDelete<T> cd = cb.createCriteriaDelete(type);

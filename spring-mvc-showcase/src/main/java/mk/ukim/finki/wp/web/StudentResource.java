@@ -4,6 +4,7 @@ import mk.ukim.finki.wp.model.Course;
 import mk.ukim.finki.wp.model.Student;
 import mk.ukim.finki.wp.persistence.CourseRepository;
 import mk.ukim.finki.wp.persistence.StudentRepository;
+import mk.ukim.finki.wp.service.FacultyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,51 +17,45 @@ import java.util.List;
 @RestController
 public class StudentResource {
 
-  @Autowired
-  private StudentRepository studentRepository;
 
   @Autowired
-  private CourseRepository courseRepository;
+  private FacultyService service;
 
   @RequestMapping(value = "/student/{id}", method = RequestMethod.GET)
   public Student byId(@PathVariable Long id) {
-    return studentRepository.getById(id);
+    return service.getStudentById(id);
   }
 
   @RequestMapping(value = "/student/by_course/{id}", method = RequestMethod.GET)
   public List<Student> byCourse(@PathVariable Long id) {
-    Course course = courseRepository.getById(id);
-    return studentRepository.getByCourse(course);
+    return service.getCourseStudents(id);
   }
+
+
 
   @RequestMapping(value = "/student", method = RequestMethod.GET)
   public Student save(@RequestParam String index, @RequestParam String name, @RequestParam String courseName) {
-    Student student = new Student();
-    student.firstName = name;
-    student.lastName = name;
-    student.index = index;
-    Course c = courseRepository.getByName(courseName);
-    if(c==null) {
-      c=new Course();
-      c.name=courseName;
-//      courseRepository.save(c);
-    }
-    student.courses = new ArrayList<Course>();
-    student.courses.add(c);
 
-    studentRepository.save(student);
-    return student;
+    return service.saveCreateStudent(index, name, name, courseName);
+
   }
 
   @RequestMapping(value = "/student/update/{id}", method = RequestMethod.GET)
-  public void udpate(@PathVariable Long id) {
-
-//    return studentRepository.getByCourse(course);
+  @ResponseBody
+  public Student udpate(@PathVariable Long id, @RequestParam String lastName) {
+    Student student = service.getStudentById(id);
+    student.lastName=lastName;
+    return service.updateStudent(student);
   }
 
   @RequestMapping(value = "/student/delete/{id}", method = RequestMethod.GET)
   public void delete(@PathVariable Long id) {
-    Course course = courseRepository.getById(id);
-    studentRepository.getByCourse(course);
+    service.deleteStudent(id);
+  }
+
+
+  @RequestMapping(value = "/course/delete/{id}", method = RequestMethod.GET)
+  public void deleteCourse(@PathVariable Long id) {
+    service.deleteCourse(id);
   }
 }

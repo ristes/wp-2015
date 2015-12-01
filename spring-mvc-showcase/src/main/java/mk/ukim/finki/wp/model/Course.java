@@ -14,10 +14,4 @@ public class Course extends BaseEntity {
 
   public String name;
 
-  @ManyToMany(fetch = FetchType.LAZY,
-    mappedBy = "courses")
-  public List<Student> students;
-
-  @OneToMany(mappedBy = "course",fetch = FetchType.LAZY)
-  public List<CourseResource> resources;
 }

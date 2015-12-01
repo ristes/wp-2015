@@ -41,4 +41,8 @@ public class CourseRepositoryImpl implements CourseRepository {
   public void save(Course c) {
     baseRepository.saveOrUpdate(c);
   }
+
+  public void delete(Course course) {
+    baseRepository.delete(Course.class, course.id);
+  }
 }
