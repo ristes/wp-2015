@@ -16,6 +16,11 @@ var eslint = require('gulp-eslint');
 var connect = require('gulp-connect');
 var fs = require("fs");
 
+var FONTS_LIB= [
+    'bower_components/components-font-awesome/fonts/fontawesome-webfont.woff2',
+    'bower_components/components-font-awesome/fonts/fontawesome-webfont.woff',
+    'bower_components/components-font-awesome/fonts/fontawesome-webfont.ttf'
+]
 
 var CSS_LIB = [
     'bower_components/bootstrap/dist/css/bootstrap.css',
@@ -78,6 +83,8 @@ var JS_APP = [
 *   The location of the resources for deploy
 */
 var DESTINATION = 'dest/';
+
+var FONTS_DESTINATION = 'dest/fonts/';
 /**
 * The single page initial html file. It will be altered 
 * by this script.
@@ -90,7 +97,7 @@ var  MODULE_NAME = 'wp-angular-starter';
 /**
 * The URL of the back-end API
 */
-var API_URL = 'http://localhost:8080/api';
+var API_URL = 'http://localhost:8080/servlet-showcase/api';
 /**
 * Route to which the API calls will be mapped 
 */
@@ -160,11 +167,17 @@ gulp.task('cache-break', function () {
         .pipe(gulp.dest('.'));  // save the modified file at the same destination
 });
 
+gulp.task('fonts', function () {
+    return gulp.src(FONTS_LIB)
+      .pipe(gulp.dest(FONTS_DESTINATION))
+});
+
 var tasks = [
     'concat_js_lib',
     'concat_css_lib',
     'concat_js_app',
     'concat_css_app',
+    'fonts',
     'templates'
 ];
 

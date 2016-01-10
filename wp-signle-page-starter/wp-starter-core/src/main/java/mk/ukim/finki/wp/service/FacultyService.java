@@ -1,5 +1,6 @@
 package mk.ukim.finki.wp.service;
 
+import mk.ukim.finki.wp.model.Course;
 import mk.ukim.finki.wp.model.Student;
 
 import java.util.List;
@@ -26,4 +27,10 @@ public interface FacultyService {
   void deleteStudent(Long id);
 
   void deleteCourse(Long id);
+
+  List<Course> getAllCourses();
+
+  Course getCourseById(Long id);
+
+  Course saveOrUpdateCourse(Course course);
 }

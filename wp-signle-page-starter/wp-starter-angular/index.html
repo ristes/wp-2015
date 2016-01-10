@@ -14,7 +14,7 @@
 
   <!-- Concatenated CSS -->
   <link href="/dest/lib.css?rev=ce521111498417454cb372b05cbd5f4d" rel="stylesheet">
-  <link href="/dest/app.css?rev=3eb049bc7ba19180ff1544059fdcc413" rel="stylesheet">
+  <link href="/dest/app.css?rev=9605eb67e52e08bd92a575a3daeb8514" rel="stylesheet">
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!--[if lt IE 9]>
@@ -24,30 +24,16 @@
 </head>
 
 <body ng-app="wp-angular-starter" ng-cloak class="ng-cloak">
-Angular application with scope id: {{$id}}
-parent scope id: '{{$parent.$id}}'
-{{ show=true }}
 
-<div ng-controller="SimpleController">
-  Name: <input name="name" ng-change="change()" ng-model="person.name"/>
-  {{person.name}}
-  <br/>
-  Last Name: {{person.lastName}}
-  <button ng-click="click()">Submit</button>
-
-  <div ng-controller="SimpleController">
-    {{person.name}}
-
-    {{persons}}
-  </div>
-</div>
+<div ui-view="navbar"></div>
+<div ui-view="main" class="main-page container"></div>
 
 
 <!-- Concatenated libraries -->
-<script src="/dest/lib.js?rev=7147198a6b39fb6a658865d2f48236a8"></script>
+<script src="/dest/lib.js?rev=2596338d75c96e53b20acefc0edbba12"></script>
 <!-- Concatenated application -->
-<script src="/dest/src.js?rev=7f265617a5874371c077319a5ac3d24e"></script>
+<script src="/dest/src.js?rev=ee062c60299bb3882b63f13285fe4235"></script>
 <!-- All html templates -->
-<script src="/dest/templates.js?rev=2e2000313aecd86f2eb18ad0c247584c"></script>
+<script src="/dest/templates.js?rev=0b666c86a77ef7f0b7a79febe0b443a2"></script>
 </body>
 </html>

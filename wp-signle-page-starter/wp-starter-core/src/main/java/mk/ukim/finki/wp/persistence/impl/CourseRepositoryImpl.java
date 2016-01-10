@@ -45,4 +45,8 @@ public class CourseRepositoryImpl implements CourseRepository {
   public void delete(Course course) {
     baseRepository.delete(Course.class, course.id);
   }
+
+  public List<Course> findAll() {
+    return baseRepository.find(Course.class, null);
+  }
 }

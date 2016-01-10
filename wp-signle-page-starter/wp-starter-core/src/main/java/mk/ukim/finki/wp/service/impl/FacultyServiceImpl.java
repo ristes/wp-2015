@@ -5,10 +5,12 @@ import mk.ukim.finki.wp.model.Student;
 import mk.ukim.finki.wp.persistence.CourseRepository;
 import mk.ukim.finki.wp.persistence.StudentRepository;
 import mk.ukim.finki.wp.service.FacultyService;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,5 +82,85 @@ public class FacultyServiceImpl implements FacultyService {
     }
     courseRepository.delete(courseRepository.getById(id));
   }
+
+  public List<Course> getAllCourses() {
+    return courseRepository.findAll();
+  }
+
+  public Course getCourseById(Long id) {
+    return courseRepository.getById(id);
+  }
+
+  public Course saveOrUpdateCourse(Course course) {
+    courseRepository.save(course);
+    return course;
+  }
+
+  @Table(name = "COOPERATE_USER")
+  @Entity
+  public class CooperateUser {
+
+    @Id
+    @Column(name = "EMBG")
+    public String embg;
+
+    public String name;
+
+    public String job;
+
+    public String address;
+
+    public DateTime birthDate;
+
+
+  }
+
+
+  @Table(name = "RESTAURANT_ORDER")
+  @Entity
+  public class Order {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public String orderId;
+
+    public String clientContact;
+
+    public int persons;
+
+    @Column(name = "table_number")
+    public String table;
+
+    public DateTime date;
+
+  }
+
+
+  @Entity
+  public class Product {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
+    public String name;
+    @ManyToOne
+    public Category group;
+
+  }
+
+  @Entity
+  public class Category {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
+    public String name;
+    @Transient
+    @OneToMany(mappedBy = "group")
+    List<Product> products;
+  }
+
+
 }
+
+
 

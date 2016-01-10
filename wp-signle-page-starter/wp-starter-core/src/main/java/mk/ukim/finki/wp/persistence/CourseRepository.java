@@ -17,4 +17,7 @@ public interface CourseRepository {
   void save(Course c);
 
   void delete(Course byId);
+
+  List<Course> findAll();
+
 }
